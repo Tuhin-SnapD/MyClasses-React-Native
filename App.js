@@ -7,7 +7,7 @@ import About from './src/screens/About';
 import Contact from './src/screens/Contact';
 import Course from './src/screens/Course';
 import UserData from './src/screens/UserData';
-
+import CourseDetails from './src/screens/CourseDetails';
 import AppLoading from "expo-app-loading";
 
 import {
@@ -34,22 +34,29 @@ export default function App() {
   return (
     <NavigationContainer >
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" options={{
+        <Stack.Screen 
+        name="Home"
+        options={{
           headerShown: false,
         }}>
           {(props) => <Home {...props} companyName={'MyClasses'} />}
         </Stack.Screen>
 
-        <Stack.Screen name="Course" component={Course} options={{
+        <Stack.Screen 
+        name="Course" 
+        component={Course} 
+        options={{
           headerTitleStyle: {
             fontSize: 25,
             fontFamily:"Nunito_600SemiBold",
           },
-          headerTitle: "Courses",
           headerTitleAlign: "center",
         }}/>
 
-        <Stack.Screen name="About" component={About} options={{
+        <Stack.Screen 
+        name="About" 
+        component={About} 
+        options={{
           headerTitleStyle: {
             fontSize: 25,
             fontFamily:"Nunito_600SemiBold",
@@ -57,14 +64,21 @@ export default function App() {
           headerTitleAlign: "center",
         }} />
 
-        <Stack.Screen name="Contact" component={Contact} options={{
+        <Stack.Screen 
+        name="Contact" 
+        component={Contact} 
+        options={{
           headerTitleStyle: {
             fontSize: 25,
             fontFamily:"Nunito_600SemiBold",
           },
           headerTitleAlign: "center",
         }} />
-        <Stack.Screen name="Profile" component={UserData} options={{
+
+        <Stack.Screen 
+        name="Profile" 
+        component={UserData} 
+        options={{
           headerTitleStyle: {
             fontSize: 25,
             fontFamily:"Nunito_600SemiBold",
@@ -72,7 +86,6 @@ export default function App() {
           headerTitle: "Profile",
           headerTitleAlign: "center",
         }} />
-
       </Stack.Navigator>
     </NavigationContainer>
   );

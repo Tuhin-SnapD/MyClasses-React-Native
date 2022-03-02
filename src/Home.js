@@ -1,9 +1,30 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
 import React from 'react'
 import Menu from '../component/Menu'
+import {
+  useFonts,
+  JosefinSans_400Regular,
+  JosefinSans_500Medium,
+} from '@expo-google-fonts/josefin-sans';
+import {
+  Nunito_600SemiBold,
+  Nunito_700Bold,
+} from '@expo-google-fonts/nunito';
+import AppLoading from "expo-app-loading";
+
 
 const Home = (props) => {
-  const description = "MyClasses, One of the world's best-known online learning resources, We have several thousand courses from leading educational providers."
+  const description1 = "MyClasses, One of the world's best-known online learning resources, We have several thousand courses from leading educational providers."
+  const description2 = "Feel free to browse MyApp - Developed by Tuhin Chakrabarty. This is his first React-Native application "
+  let [fontsLoaded] = useFonts({
+    JosefinSans_400Regular,
+    JosefinSans_500Medium,
+    Nunito_600SemiBold,
+    Nunito_700Bold,
+  });
+  if (!fontsLoaded){
+    <AppLoading/>;
+  }
   return (
     <View style={styles.mainContainer}>
       <View style={styles.homeTop}>
@@ -14,7 +35,8 @@ const Home = (props) => {
           color: "#4c5dab",
           marginTop: 0
         }}>{props.companyName}</Text>
-        <Text style={styles.paraStyle}>{description}</Text>
+        <Text style={styles.paraStyle}>{description1}</Text>
+        <Text style={styles.paraStyle}>{description2}</Text>
       </View>
       <View style={styles.menuStyle}>
         <View style={styles.lineStyle}></View>
@@ -48,7 +70,7 @@ const styles = StyleSheet.create({
   headerImage: {
     height: undefined,
     width: "100%",
-    aspectRatio: 1.8,
+    aspectRatio: 1.2,
     display: "flex",
     marginTop: 50,
     borderRadius: 15
@@ -56,16 +78,19 @@ const styles = StyleSheet.create({
   mainHeader: {
     fontSize: 30,
     color: "#344055",
+    fontFamily: "Nunito_600SemiBold",
+    marginTop:20,
     // textTransform: "uppercase"
   },
   paraStyle: {
-    textAlign: "left",
-    fontSize: 19,
+    textAlign: "center",
+    fontSize: 18,
     color: "#7d7d7d",
-    marginTop: 30,
-    paddingBottom: 50,
-    lineHeight: 23,
-    margin:15,
+    paddingTop: 20,
+    // paddingBottom: 50,
+    lineHeight: 22,
+    paddingHorizontal:30,
+    fontFamily: "JosefinSans_400Regular",
   },
   lineStyle: {
     marginBottom:10,
