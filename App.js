@@ -86,6 +86,18 @@ export default function App() {
           headerTitle: "Profile",
           headerTitleAlign: "center",
         }} />
+
+        <Stack.Screen 
+        name="CourseDetails" 
+        component={CourseDetails} 
+        options={{
+          headerTitleStyle: {
+            fontSize: 25,
+            fontFamily:"Nunito_600SemiBold",
+          },
+          headerTitleAlign: "center",
+        }}/>
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

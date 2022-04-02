@@ -1,40 +1,33 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
-import React from 'react'
-import Menu from '../component/Menu'
-import {
-  useFonts,
-  JosefinSans_400Regular,
-  JosefinSans_500Medium,
-} from '@expo-google-fonts/josefin-sans';
-import {
-  Nunito_600SemiBold,
-  Nunito_700Bold,
-} from '@expo-google-fonts/nunito';
+import { StyleSheet, Text, View, Image } from "react-native";
+import React from "react";
+import Menu from "../component/Menu";
+import { useFonts, WorkSans_400Regular } from "@expo-google-fonts/work-sans";
+import { Nunito_700Bold } from "@expo-google-fonts/nunito";
 import AppLoading from "expo-app-loading";
 
-
 const Home = (props) => {
-  const description1 = "MyClasses, One of the world's best-known online learning resources, We have several thousand courses from leading educational providers."
-  const description2 = "Feel free to browse MyApp - Developed by Tuhin Chakrabarty. This is his first React-Native application "
   let [fontsLoaded] = useFonts({
-    JosefinSans_400Regular,
-    JosefinSans_500Medium,
-    Nunito_600SemiBold,
+    WorkSans_400Regular,
     Nunito_700Bold,
   });
-  if (!fontsLoaded){
-    <AppLoading/>;
+
+  if (!fontsLoaded) {
+    <AppLoading />;
   }
+  
+  const description1 = "MyClasses, One of the world's best-known online learning resources, We have several thousand courses from leading educational providers."
+  const description2 = "Feel free to browse MyApp - Developed by Tuhin Chakrabarty. This is his first React-Native application "
+  
   return (
     <View style={styles.mainContainer}>
       <View style={styles.homeTop}>
         <Image style={styles.headerImage} resizeMode="contain" source={require("./../assets/logo.jpg")} />
         <Text style={styles.mainHeader}>Welcome to</Text>
-        <Text style={styles.mainHeader, {
+        <Text style={[styles.mainHeader, {
           fontSize: 25,
           color: "#4c5dab",
           marginTop: 0
-        }}>{props.companyName}</Text>
+        }]}>{props.companyName}</Text>
         <Text style={styles.paraStyle}>{description1}</Text>
         <Text style={styles.paraStyle}>{description2}</Text>
       </View>

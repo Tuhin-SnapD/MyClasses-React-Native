@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
-import Courses from "../api/Course";
+import Courses from "../api/Courseapi";
 
 import AppLoading from "expo-app-loading";
 
@@ -44,7 +44,12 @@ const Course = ({ navigation }) => {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.buttonStyle}
-              onPress={() => navigation.navigate('CourseDetails')}>
+              onPress={
+                () => navigation.navigate('CourseDetails',
+              {
+                courseId : item.id,
+              })
+              }>
               <Text style={styles.buttonText}>Details</Text>
             </TouchableOpacity>
           </View>
