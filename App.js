@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View, Text } from 'react-native';
 
 import Home from './src/Home';
 import About from './src/screens/About';
@@ -8,96 +9,70 @@ import Contact from './src/screens/Contact';
 import Course from './src/screens/Course';
 import UserData from './src/screens/UserData';
 import CourseDetails from './src/screens/CourseDetails';
-import AppLoading from "expo-app-loading";
 
-import {
-  useFonts,
-  JosefinSans_400Regular,
-  JosefinSans_500Medium,
-} from '@expo-google-fonts/josefin-sans';
-import {
-  Nunito_600SemiBold,
-  Nunito_700Bold,
-} from '@expo-google-fonts/nunito';
+import { useAppFonts } from './src/config/fonts';
+import { HEADER_STYLES } from './src/config/styles';
+import { APP_CONFIG } from './src/config/constants';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
-  let [fontsLoaded] = useFonts({
-    JosefinSans_400Regular,
-    JosefinSans_500Medium,
-    Nunito_600SemiBold,
-    Nunito_700Bold,
-  });
-  if (!fontsLoaded){
-    <AppLoading/>;
+  const [fontsLoaded] = useAppFonts();
+
+  if (!fontsLoaded) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
+
+  const screenOptions = {
+    ...HEADER_STYLES,
+  };
+
   return (
-    <NavigationContainer >
-      <Stack.Navigator initialRouteName="Home">
+    <NavigationContainer>
+      <Stack.Navigator 
+        initialRouteName="Home"
+        screenOptions={screenOptions}
+      >
         <Stack.Screen 
-        name="Home"
-        options={{
-          headerShown: false,
-        }}>
-          {(props) => <Home {...props} companyName={'MyClasses'} />}
+          name="Home"
+          options={{
+            headerShown: false,
+          }}
+        >
+          {(props) => <Home {...props} companyName={APP_CONFIG.COMPANY_NAME} />}
         </Stack.Screen>
 
         <Stack.Screen 
-        name="Course" 
-        component={Course} 
-        options={{
-          headerTitleStyle: {
-            fontSize: 25,
-            fontFamily:"Nunito_600SemiBold",
-          },
-          headerTitleAlign: "center",
-        }}/>
+          name="Course" 
+          component={Course} 
+        />
 
         <Stack.Screen 
-        name="About" 
-        component={About} 
-        options={{
-          headerTitleStyle: {
-            fontSize: 25,
-            fontFamily:"Nunito_600SemiBold",
-          },
-          headerTitleAlign: "center",
-        }} />
+          name="About" 
+          component={About} 
+        />
 
         <Stack.Screen 
-        name="Contact" 
-        component={Contact} 
-        options={{
-          headerTitleStyle: {
-            fontSize: 25,
-            fontFamily:"Nunito_600SemiBold",
-          },
-          headerTitleAlign: "center",
-        }} />
+          name="Contact" 
+          component={Contact} 
+        />
 
         <Stack.Screen 
-        name="Profile" 
-        component={UserData} 
-        options={{
-          headerTitleStyle: {
-            fontSize: 25,
-            fontFamily:"Nunito_600SemiBold",
-          },
-          headerTitle: "Profile",
-          headerTitleAlign: "center",
-        }} />
+          name="Profile" 
+          component={UserData} 
+          options={{
+            ...screenOptions,
+            headerTitle: "Profile",
+          }}
+        />
 
         <Stack.Screen 
-        name="CourseDetails" 
-        component={CourseDetails} 
-        options={{
-          headerTitleStyle: {
-            fontSize: 25,
-            fontFamily:"Nunito_600SemiBold",
-          },
-          headerTitleAlign: "center",
-        }}/>
-        
+          name="CourseDetails" 
+          component={CourseDetails} 
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

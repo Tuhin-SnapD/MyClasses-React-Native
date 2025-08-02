@@ -29,7 +29,6 @@ MyClasses-React-Native/
 ├── 📱 App.js                    # Main app component with navigation
 ├── 📦 package.json              # Dependencies and scripts
 ├── 📖 README.md                 # Project documentation
-├── 📸 screenshots/              # App screenshots
 └── src/
     ├── 🧩 components/           # Reusable UI components
     │   └── Menu.js             # Navigation menu component
@@ -131,48 +130,6 @@ Error: #e74c3c        // Red
 - **Josefin Sans**: Regular, Medium (Body text)
 - **Nunito**: SemiBold, Bold (Headers and emphasis)
 - **Work Sans**: Alternative font option
-
-## 📸 Screenshots
-
-### 🚀 Quick Screenshot Capture
-
-We've included automated scripts to help you capture screenshots:
-
-```bash
-# Run the screenshot helper
-node scripts/screenshot-helper.js
-
-# Or on Windows, double-click:
-screenshot-helper.bat
-```
-
-### 📱 Manual Screenshot Capture
-
-1. **Start your app**
-   ```bash
-   npm start
-   ```
-
-2. **Open in browser**
-   - Navigate to: `http://localhost:19006`
-
-3. **Use browser DevTools**
-   - Press `F12` to open DevTools
-   - Click the device toggle (mobile icon)
-   - Set viewport to `375x812` (iPhone X)
-   - Navigate to each screen and take screenshots
-
-4. **Required screenshots**
-   - `home-screen.png` - Home screen with welcome message
-   - `course-listing.png` - Course listing with cards
-   - `course-details.png` - Individual course details
-   - `contact-form.png` - Contact form
-   - `about-page.png` - About page
-   - `user-profile.png` - User profile
-
-5. **Save screenshots**
-   - Save all screenshots in the `screenshots/` folder
-   - Use exact filenames (case-sensitive)
 
 ## 🔧 Configuration
 
