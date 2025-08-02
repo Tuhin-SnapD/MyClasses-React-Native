@@ -203,17 +203,6 @@ This project is developed by **Tuhin Chakrabarty** as a React Native learning ap
 
 ---
 
-## 👨‍💻 Developer
-
-**Tuhin Chakrabarty**  
-*React Native Developer*
-
-- 🌐 **GitHub**: [Tuhin-SnapD](https://github.com/Tuhin-SnapD)
-- 📧 **Email**: [Add your email]
-- 💼 **LinkedIn**: [Add your LinkedIn]
-
----
-
 **Framework**: React Native with Expo  
 **Version**: 1.0.0  
 **Last Updated**: January 2025
