@@ -1,141 +1,239 @@
-import { View, Text, FlatList, StyleSheet, Image } from "react-native";
-import React, { useState, useEffect } from "react";
-import { useFonts, WorkSans_400Regular } from "@expo-google-fonts/work-sans";
-import { Nunito_700Bold } from "@expo-google-fonts/nunito";
-import AppLoading from "expo-app-loading";
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { COMMON_STYLES, COLORS } from '../config/styles';
+import { STUDENT_DATA } from '../config/constants';
 
 const UserData = () => {
-  let [fontsLoaded] = useFonts({
-    WorkSans_400Regular,
-    Nunito_700Bold,
-  });
+  const [students] = useState(STUDENT_DATA);
 
-  if (!fontsLoaded) {
-    <AppLoading />;
-  }
-
-  const [isLoaded, setIsLoaded] = useState(true);
-  const [myData, setMyData] = useState([]);
-
-  const getUserData = async () => {
-    try {
-      const response = await fetch(
-        "https://tuhin-snapd.github.io/json/user.json"
-      );
-      const realData = await response.json();
-      setMyData(realData);
-      setIsLoaded(false);
-      // console.log(realData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => getUserData(), []);
-
-  // render the students cards
-  const showUserData = ({ item }) => {
+  const renderStudentCard = ({ item }) => {
     return (
-      <View style={styles.card}>
-        <View style={styles.imgContainer}>
-          <Image style={styles.imgStyle} source={{ uri: item.image }} />
+      <View style={styles.studentCard}>
+        <View style={styles.imageContainer}>
+          <Image 
+            style={styles.studentImage} 
+            source={{ uri: item.image }}
+            resizeMode="cover"
+          />
+          <View style={styles.statusBadge}>
+            <Text style={styles.statusText}>{item.status}</Text>
+          </View>
         </View>
 
-        <View>
-          <View style={styles.bioDataContainer}>
-            <Text style={styles.bioData}> Bio-Data </Text>
-            <Text style={styles.idNumber}>
-              {item.id < 10 ? `#0${item.id}` : `#{item.id}`}
-            </Text>
+        <View style={styles.studentInfo}>
+          <Text style={styles.studentName}>{item.name}</Text>
+          <Text style={styles.studentCourse}>{item.course}</Text>
+          
+          <View style={styles.contactInfo}>
+            <View style={styles.contactItem}>
+              <Text style={styles.contactLabel}>Email:</Text>
+              <Text style={styles.contactValue}>{item.email}</Text>
+            </View>
+            <View style={styles.contactItem}>
+              <Text style={styles.contactLabel}>Phone:</Text>
+              <Text style={styles.contactValue}>{item.mobile}</Text>
+            </View>
           </View>
 
-          <View style={styles.mainContain}>
-            <Text style={styles.myName}> Name: {item.name} </Text>
-            <Text style={styles.myName}> email: {item.email} </Text>
-            <Text style={styles.myName}> mobile: {item.mobile} </Text>
-          </View>
+          <TouchableOpacity style={styles.viewProfileButton}>
+            <Text style={styles.viewProfileText}>View Profile</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
   };
 
   return (
-    <View>
-      <Text style={styles.mainHeader}>List of Students</Text>
-      <FlatList
-        keyExtractor={(item) => item.id}
-        data={myData}
-        renderItem={showUserData}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-    </View>
+    <ScrollView style={styles.mainContainer} showsVerticalScrollIndicator={false}>
+      <View style={styles.contentContainer}>
+        {/* Header Section */}
+        <View style={styles.headerSection}>
+          <Text style={styles.mainHeader}>Our Students</Text>
+          <Text style={styles.subHeader}>
+            Meet our talented students who are pursuing their educational goals with dedication and passion.
+          </Text>
+          
+          <View style={styles.statsContainer}>
+            <View style={styles.statItem}>
+              <Text style={styles.statNumber}>{students.length}</Text>
+              <Text style={styles.statLabel}>Total Students</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={styles.statNumber}>6</Text>
+              <Text style={styles.statLabel}>Active Courses</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={styles.statNumber}>100%</Text>
+              <Text style={styles.statLabel}>Success Rate</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Students List */}
+        <View style={styles.studentsSection}>
+          <Text style={styles.sectionTitle}>Student Directory</Text>
+          <FlatList
+            data={students}
+            renderItem={renderStudentCard}
+            keyExtractor={(item) => item.id.toString()}
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
+            contentContainerStyle={styles.listContainer}
+          />
+        </View>
+
+        {/* Footer */}
+        <View style={styles.footerSection}>
+          <Text style={styles.footerText}>
+            Join our community of learners and start your journey today!
+          </Text>
+        </View>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   mainContainer: {
-    width: "100%",
-    minHeight: "100%",
-    paddingVertical: 50,
-    backgroundColor: "#ebedee",
+    ...COMMON_STYLES.mainContainer,
   },
-  card: {
-    width: 250,
-    // height: 350,
-    backgroundColor: "#fff",
-    borderRadius: 5,
-    marginHorizontal: 20,
+  contentContainer: {
+    padding: 20,
   },
-  bioDataContainer: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#353535",
-    paddingVertical: 10,
-    fontFamily: "WorkSans_400Regular",
-  },
-  idNumber: {
-    fontSize: 20,
-    color: "rgba(255, 255, 255, 0.5)",
-    fontFamily: "WorkSans_400Regular",
-    paddingRight: 10,
-  },
-  bioData: {
-    fontSize: 30,
-    color: "#fff",
-    fontFamily: "WorkSans_400Regular",
+  headerSection: {
+    alignItems: 'center',
+    marginBottom: 30,
   },
   mainHeader: {
-    fontSize: 30,
-    color: "#a18ce5",
-    textAlign: "center",
-    fontFamily: "WorkSans_400Regular",
-    paddingVertical: 50,
+    ...COMMON_STYLES.mainHeader,
+    marginBottom: 12,
   },
-  imgContainer: {
-    padding: 10,
+  subHeader: {
+    ...COMMON_STYLES.paraStyle,
+    textAlign: 'center',
+    marginBottom: 24,
   },
-  imgStyle: {
-    width: "100%",
-    height: 180,
+  statsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    backgroundColor: COLORS.WHITE,
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: COLORS.SHADOW,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
-  mainContain: {
-    padding: 10,
-    backgroundColor: "#353535",
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5,
-    paddingBottom: 20,
+  statItem: {
+    alignItems: 'center',
+    flex: 1,
   },
-  myName: {
+  statNumber: {
+    fontSize: 24,
+    color: COLORS.PRIMARY,
+    fontFamily: 'Nunito_700Bold',
+    fontWeight: 'bold',
+  },
+  statLabel: {
+    fontSize: 12,
+    color: COLORS.TEXT_SECONDARY,
+    fontFamily: 'JosefinSans_400Regular',
+    textAlign: 'center',
+    marginTop: 4,
+  },
+  studentsSection: {
+    marginBottom: 30,
+  },
+  sectionTitle: {
+    ...COMMON_STYLES.subHeader,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  listContainer: {
+    gap: 16,
+  },
+  studentCard: {
+    ...COMMON_STYLES.cardContainer,
+    marginBottom: 16,
+    overflow: 'hidden',
+  },
+  imageContainer: {
+    position: 'relative',
+    marginBottom: 16,
+  },
+  studentImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 12,
+  },
+  statusBadge: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    backgroundColor: COLORS.SUCCESS,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+  },
+  statusText: {
+    color: COLORS.WHITE,
+    fontSize: 12,
+    fontFamily: 'JosefinSans_400Regular',
+    fontWeight: '600',
+  },
+  studentInfo: {
+    paddingHorizontal: 4,
+  },
+  studentName: {
+    fontSize: 20,
+    color: COLORS.TEXT_PRIMARY,
+    fontFamily: 'Nunito_700Bold',
+    marginBottom: 4,
+  },
+  studentCourse: {
+    fontSize: 16,
+    color: COLORS.PRIMARY,
+    fontFamily: 'Nunito_600SemiBold',
+    marginBottom: 16,
+  },
+  contactInfo: {
+    marginBottom: 16,
+  },
+  contactItem: {
+    flexDirection: 'row',
+    marginBottom: 8,
+  },
+  contactLabel: {
     fontSize: 14,
-    color: "#fff",
-    marginBottom: 10,
-    alignSelf: "flex-start",
-    textTransform: "capitalize",
-    fontFamily: "WorkSans_400Regular",
+    color: COLORS.TEXT_SECONDARY,
+    fontFamily: 'Nunito_600SemiBold',
+    minWidth: 60,
+  },
+  contactValue: {
+    fontSize: 14,
+    color: COLORS.TEXT_PRIMARY,
+    fontFamily: 'JosefinSans_400Regular',
+    flex: 1,
+  },
+  viewProfileButton: {
+    ...COMMON_STYLES.buttonSecondary,
+    alignSelf: 'flex-start',
+  },
+  viewProfileText: {
+    ...COMMON_STYLES.buttonText,
+  },
+  footerSection: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  footerText: {
+    fontSize: 16,
+    color: COLORS.TEXT_LIGHT,
+    fontFamily: 'JosefinSans_400Regular',
+    textAlign: 'center',
+    fontStyle: 'italic',
   },
 });
 

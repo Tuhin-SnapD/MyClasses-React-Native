@@ -5,146 +5,253 @@ import {
   TouchableOpacity,
   View,
   Image,
+  ScrollView,
 } from "react-native";
 import React from "react";
-import { useFonts, WorkSans_400Regular } from "@expo-google-fonts/work-sans";
-import { Nunito_700Bold } from "@expo-google-fonts/nunito";
-import AppLoading from "expo-app-loading";
+import { COMMON_STYLES, COLORS } from '../config/styles';
+import { SOCIAL_LINKS, SOCIAL_ICONS, APP_CONFIG } from '../config/constants';
 
 const About = () => {
-  let [fontsLoaded] = useFonts({
-    WorkSans_400Regular,
-    Nunito_700Bold,
-  });
+  const socialLinks = [
+    {
+      name: 'GitHub',
+      url: SOCIAL_LINKS.GITHUB,
+      icon: SOCIAL_ICONS.GITHUB,
+    },
+    {
+      name: 'LinkedIn',
+      url: SOCIAL_LINKS.LINKEDIN,
+      icon: SOCIAL_ICONS.LINKEDIN,
+    },
+    {
+      name: 'HackerRank',
+      url: SOCIAL_LINKS.HACKERRANK,
+      icon: SOCIAL_ICONS.HACKERRANK,
+    },
+  ];
 
-  if (!fontsLoaded) {
-    <AppLoading />;
-  }
+  const handleSocialLink = (url) => {
+    Linking.openURL(url);
+  };
 
   return (
-    <View style={styles.aboutContainer}>
-      <Text style={styles.mainHeader}> Tuhin Chakrabarty </Text>
-      <Text style={styles.paraStyle}>Budding Developer </Text>
+    <ScrollView style={styles.mainContainer} showsVerticalScrollIndicator={false}>
+      <View style={styles.contentContainer}>
+        {/* Profile Section */}
+        <View style={styles.profileSection}>
+          <View style={styles.profileImageContainer}>
+            <Image
+              style={styles.profileImage}
+              source={{
+                uri: "https://avatars.githubusercontent.com/u/67930437?v=4"
+              }}
+            />
+          </View>
+          
+          <Text style={styles.nameText}>{APP_CONFIG.DEVELOPER}</Text>
+          <Text style={styles.titleText}>Full Stack Developer</Text>
+          
+          <View style={styles.badgeContainer}>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>React Native</Text>
+            </View>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>JavaScript</Text>
+            </View>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>Node.js</Text>
+            </View>
+          </View>
+        </View>
 
-      <View>
-        <Image
-          style={styles.imgStyle}
-          source={require("../../assets/tuhin.png")}
-        />
+        {/* About Section */}
+        <View style={styles.aboutSection}>
+          <Text style={styles.sectionTitle}>About Me</Text>
+          <View style={styles.aboutCard}>
+            <Text style={styles.aboutText}>
+              Passionate developer with a love for creating innovative solutions. 
+              I specialize in React Native development and enjoy building apps that 
+              make a difference in people's lives. Always eager to learn new technologies 
+              and contribute to exciting projects.
+            </Text>
+          </View>
+        </View>
+
+        {/* Skills Section */}
+        <View style={styles.skillsSection}>
+          <Text style={styles.sectionTitle}>Skills & Expertise</Text>
+          <View style={styles.skillsCard}>
+            <View style={styles.skillRow}>
+              <Text style={styles.skillLabel}>Frontend Development</Text>
+              <Text style={styles.skillValue}>React Native, React.js, JavaScript</Text>
+            </View>
+            <View style={styles.skillRow}>
+              <Text style={styles.skillLabel}>Backend Development</Text>
+              <Text style={styles.skillValue}>Node.js, Express.js, MongoDB</Text>
+            </View>
+            <View style={styles.skillRow}>
+              <Text style={styles.skillLabel}>Tools & Platforms</Text>
+              <Text style={styles.skillValue}>Git, VS Code, Expo, Firebase</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Social Links Section */}
+        <View style={styles.socialSection}>
+          <Text style={styles.sectionTitle}>Connect With Me</Text>
+          <View style={styles.socialContainer}>
+            {socialLinks.map((social, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.socialButton}
+                onPress={() => handleSocialLink(social.url)}
+                activeOpacity={0.7}
+              >
+                <Image
+                  style={styles.socialIcon}
+                  source={{ uri: social.icon }}
+                />
+                <Text style={styles.socialText}>{social.name}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* Footer */}
+        <View style={styles.footerSection}>
+          <Text style={styles.footerText}>
+            Let's build something amazing together! 🚀
+          </Text>
+        </View>
       </View>
-
-      <View style={styles.aboutLayout}>
-        <Text style={styles.aboutSubHeader}> About me </Text>
-        <Text style={[styles.paraStyle, styles.aboutPara]}>
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-          commodo ligula eget dolor. 
-        </Text>
-      </View>
-
-      <Text style={styles.mainHeader}> Follow me on Social Network </Text>
-
-      <View style={styles.menuContainer}>
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={() =>
-            Linking.openURL("https://github.com/Tuhin-SnapD")
-          }>
-          <Image
-            style={styles.iconStyle}
-            source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/1051/1051326.png",
-            }}
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={() =>
-            Linking.openURL(
-              "https://www.linkedin.com/in/tuhin-chakrabarty-1074aa19b/"
-            )
-          }>
-          <Image
-            style={styles.iconStyle}
-            source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-            }}
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={() => Linking.openURL("https://www.hackerrank.com/tuhinchakrabart1")}>
-          <Image
-            style={styles.iconStyle}
-            source={{
-              uri: "https://upload.wikimedia.org/wikipedia/commons/4/40/HackerRank_Icon-1000px.png",
-            }}
-          />
-        </TouchableOpacity>
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  aboutContainer: {
-    display: "flex",
-    alignItems: "center",
+  mainContainer: {
+    ...COMMON_STYLES.mainContainer,
   },
-
-  imgStyle: {
-    width: 220,
-    height: 220,
-    borderRadius: 100,
+  contentContainer: {
+    padding: 20,
   },
-  mainHeader: {
+  profileSection: {
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  profileImageContainer: {
+    marginBottom: 20,
+  },
+  profileImage: {
+    ...COMMON_STYLES.profileImage,
+  },
+  nameText: {
+    fontSize: 28,
+    color: COLORS.TEXT_PRIMARY,
+    fontFamily: 'Nunito_700Bold',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  titleText: {
     fontSize: 18,
-    color: "#344055",
-    textTransform: "uppercase",
-    fontWeight: "500",
-    // marginTop: 50,
-    marginTop: 40,
-    marginBottom: 10,
-    fontFamily: "Nunito_700Bold",
+    color: COLORS.PRIMARY,
+    fontFamily: 'Nunito_600SemiBold',
+    marginBottom: 16,
+    textAlign: 'center',
   },
-  paraStyle: {
-    fontSize: 18,
-    color: "#7d7d7d",
-    paddingBottom: 30,
-    fontFamily: "WorkSans_400Regular",
+  badgeContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 8,
   },
-  aboutLayout: {
-    backgroundColor: "#4c5dab",
-    paddingHorizontal: 30,
-    // marginVertical: 30,
+  badge: {
+    ...COMMON_STYLES.badge,
+  },
+  badgeText: {
+    ...COMMON_STYLES.badgeText,
+  },
+  aboutSection: {
+    marginBottom: 30,
+  },
+  sectionTitle: {
+    ...COMMON_STYLES.subHeader,
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  aboutCard: {
+    ...COMMON_STYLES.cardContainer,
+  },
+  aboutText: {
+    fontSize: 16,
+    color: COLORS.TEXT_SECONDARY,
+    fontFamily: 'JosefinSans_400Regular',
+    lineHeight: 24,
+    textAlign: 'center',
+  },
+  skillsSection: {
+    marginBottom: 30,
+  },
+  skillsCard: {
+    ...COMMON_STYLES.cardContainer,
+  },
+  skillRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.BORDER,
+  },
+  skillLabel: {
+    fontSize: 16,
+    color: COLORS.TEXT_PRIMARY,
+    fontFamily: 'Nunito_600SemiBold',
+    flex: 1,
+  },
+  skillValue: {
+    fontSize: 14,
+    color: COLORS.TEXT_SECONDARY,
+    fontFamily: 'JosefinSans_400Regular',
+    flex: 2,
+    textAlign: 'right',
+  },
+  socialSection: {
+    marginBottom: 30,
+  },
+  socialContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  socialButton: {
+    ...COMMON_STYLES.socialButton,
+    minWidth: 100,
+    paddingVertical: 16,
+  },
+  socialIcon: {
+    width: 32,
+    height: 32,
+    marginBottom: 8,
+  },
+  socialText: {
+    fontSize: 12,
+    color: COLORS.TEXT_SECONDARY,
+    fontFamily: 'JosefinSans_400Regular',
+    textAlign: 'center',
+    fontWeight: '500',
+  },
+  footerSection: {
+    alignItems: 'center',
     marginTop: 20,
   },
-  aboutSubHeader: {
-    fontSize: 18,
-    color: "#fff",
-    textTransform: "uppercase",
-    fontWeight: "500",
-    marginVertical: 15,
-    fontFamily: "Nunito_700Bold",
-    alignSelf: "center",
-  },
-  aboutPara: {
-    color: "#fff",
-    fontSize: 18,
-    fontFamily: "WorkSans_400Regular",
-    lineHeight: 26,
-  },
-  menuContainer: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-  },
-
-  iconStyle: {
-    width: "100%",
-    height: 50,
-    aspectRatio: 1,
+  footerText: {
+    fontSize: 16,
+    color: COLORS.TEXT_LIGHT,
+    fontFamily: 'JosefinSans_400Regular',
+    textAlign: 'center',
+    fontStyle: 'italic',
   },
 });
 

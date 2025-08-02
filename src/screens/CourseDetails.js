@@ -1,131 +1,217 @@
-import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React from 'react';
 import Courses from "../api/Courseapi";
-
-import AppLoading from "expo-app-loading";
-
-import {
-  useFonts,
-  JosefinSans_400Regular,
-  JosefinSans_500Medium,
-} from '@expo-google-fonts/josefin-sans';
-import {
-  Nunito_600SemiBold,
-  Nunito_700Bold,
-} from '@expo-google-fonts/nunito';
-
+import { COMMON_STYLES, COLORS } from '../config/styles';
 
 const CourseDetails = ({ navigation, route }) => {
-
-  let [fontsLoaded] = useFonts({
-    JosefinSans_400Regular,
-    JosefinSans_500Medium,
-    Nunito_600SemiBold,
-    Nunito_700Bold,
-  });
-  if (!fontsLoaded) {
-    <AppLoading />;
-  }
-  const id = route.params.courseId
+  const id = route.params.courseId;
   const selectedCourse = Courses.find((elements) => {
-    return id === elements.id
+    return id === elements.id;
   });
-  return (
-    <View style={styles.mainContainer}>
-      <View style={styles.courseContainer}>
-        <View>
-          <Image style={styles.cardImage}
-            source={selectedCourse.image}
-            resizeMode="contain"
-          />
-        </View>
-        <Text style={styles.mainHeader}>
-          {selectedCourse.title}
-        </Text>
-        <Text style={styles.description}>
-          {selectedCourse.course1}
-        </Text>
-        <Text style={styles.description}>
-          {selectedCourse.course2}
-        </Text>
-        <Text style={styles.description}>
-          {selectedCourse.course3}
-        </Text>
 
-        <View style={styles.buttonContainer}>
-        <Text style={styles.price}>Rs. 
-          {selectedCourse.price}
-        </Text>
-          <TouchableOpacity
-            style={styles.buttonStyle}
-            onPress={
-              () => navigation.navigate('Course')
-            }>
-            <Text style={styles.buttonText}>Join Today</Text>
-          </TouchableOpacity>
+  const handleJoinCourse = () => {
+    // Here you would typically handle course enrollment
+    alert(`Successfully enrolled in ${selectedCourse.title}!`);
+    navigation.navigate('Course');
+  };
+
+  return (
+    <ScrollView style={styles.mainContainer} showsVerticalScrollIndicator={false}>
+      <View style={styles.contentContainer}>
+        {/* Course Image */}
+        <View style={styles.imageContainer}>
+          <Image 
+            style={styles.courseImage}
+            source={selectedCourse.image}
+            resizeMode="cover"
+          />
+          <View style={styles.priceTag}>
+            <Text style={styles.priceText}>₹{selectedCourse.price}</Text>
+          </View>
+        </View>
+
+        {/* Course Information */}
+        <View style={styles.courseInfo}>
+          <Text style={styles.courseTitle}>
+            {selectedCourse.title}
+          </Text>
+          
+          <Text style={styles.courseDescription}>
+            {selectedCourse.description}
+          </Text>
+
+          {/* Subjects */}
+          <View style={styles.subjectsSection}>
+            <Text style={styles.sectionTitle}>Course Subjects</Text>
+            <View style={styles.subjectsContainer}>
+              <View style={styles.subjectBadge}>
+                <Text style={styles.subjectText}>{selectedCourse.course1}</Text>
+              </View>
+              <View style={styles.subjectBadge}>
+                <Text style={styles.subjectText}>{selectedCourse.course2}</Text>
+              </View>
+              <View style={styles.subjectBadge}>
+                <Text style={styles.subjectText}>{selectedCourse.course3}</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Course Features */}
+          <View style={styles.featuresSection}>
+            <Text style={styles.sectionTitle}>What You'll Learn</Text>
+            <View style={styles.featuresList}>
+              <View style={styles.featureItem}>
+                <Text style={styles.featureText}>✓ Comprehensive study materials</Text>
+              </View>
+              <View style={styles.featureItem}>
+                <Text style={styles.featureText}>✓ Expert instructor guidance</Text>
+              </View>
+              <View style={styles.featureItem}>
+                <Text style={styles.featureText}>✓ Practice tests and assignments</Text>
+              </View>
+              <View style={styles.featureItem}>
+                <Text style={styles.featureText}>✓ 24/7 doubt resolution</Text>
+              </View>
+              <View style={styles.featureItem}>
+                <Text style={styles.featureText}>✓ Certificate upon completion</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Enrollment Section */}
+          <View style={styles.enrollmentSection}>
+            <View style={styles.priceSection}>
+              <Text style={styles.priceLabel}>Course Fee:</Text>
+              <Text style={styles.priceValue}>₹{selectedCourse.price}</Text>
+            </View>
+            
+            <TouchableOpacity
+              style={styles.enrollButton}
+              onPress={handleJoinCourse}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.enrollButtonText}>Enroll Now</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View >
+    </ScrollView>
   );
-}
+};
+
 const styles = StyleSheet.create({
-  cardImage: {
-    width: "100%",
-    height: undefined,
-    aspectRatio: 1.6,
-  },
   mainContainer: {
-    paddingHorizontal: 18,
+    ...COMMON_STYLES.mainContainer,
   },
-  courseContainer: {
-    padding: 30,
-    backgroundColor: "rgba(255,255,255,0.90)",
-    textAlign: "center",
-    borderRadius: 5,
-    shadowColor: "grey",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.5,
-    shadowRadius: 8,
+  contentContainer: {
+    padding: 20,
+  },
+  imageContainer: {
+    position: 'relative',
+    marginBottom: 24,
+  },
+  courseImage: {
+    width: '100%',
+    height: 250,
+    borderRadius: 16,
+  },
+  priceTag: {
+    ...COMMON_STYLES.priceTag,
+    position: 'absolute',
+    top: 16,
+    right: 16,
+  },
+  priceText: {
+    ...COMMON_STYLES.priceText,
+  },
+  courseInfo: {
+    backgroundColor: COLORS.WHITE,
+    borderRadius: 16,
+    padding: 24,
+    shadowColor: COLORS.SHADOW,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
     elevation: 8,
-    marginVertical: 30,
   },
-  mainHeader: {
-    fontSize: 30,
-    color: "#344055",
-    textAlign: "center",
-    paddingBottom: 15,
-    fontFamily: "Nunito_600SemiBold",
-    // fontWeight:500,
+  courseTitle: {
+    fontSize: 28,
+    color: COLORS.TEXT_PRIMARY,
+    fontFamily: 'Nunito_700Bold',
+    marginBottom: 16,
+    lineHeight: 32,
   },
-  description: {
-    textAlign: "center",
-    fontFamily: "JosefinSans_400Regular",
-    paddingBottom: 15,
-    lineHeight: 18,
+  courseDescription: {
     fontSize: 16,
-    color: "#7d7d7d",
+    color: COLORS.TEXT_SECONDARY,
+    fontFamily: 'JosefinSans_400Regular',
+    lineHeight: 24,
+    marginBottom: 24,
   },
-  price:{
-    backgroundColor: "#f5f5f5",
-    marginBottom:4,
-    fontSize: 16
-
+  subjectsSection: {
+    marginBottom: 24,
   },
-  buttonStyle: {
-    backgroundColor: "#809fff",
-    borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 18,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+  sectionTitle: {
+    ...COMMON_STYLES.subHeader,
+    marginBottom: 16,
   },
-  buttonText: {
+  subjectsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  subjectBadge: {
+    ...COMMON_STYLES.badge,
+  },
+  subjectText: {
+    ...COMMON_STYLES.badgeText,
+  },
+  featuresSection: {
+    marginBottom: 24,
+  },
+  featuresList: {
+    gap: 12,
+  },
+  featureItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  featureText: {
     fontSize: 16,
-    color: "#eeeeee",
-    fontFamily: "JosefinSans_500Medium"
+    color: COLORS.TEXT_SECONDARY,
+    fontFamily: 'JosefinSans_400Regular',
+    lineHeight: 22,
   },
-
+  enrollmentSection: {
+    borderTopWidth: 1,
+    borderTopColor: COLORS.BORDER,
+    paddingTop: 24,
+    alignItems: 'center',
+  },
+  priceSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  priceLabel: {
+    fontSize: 18,
+    color: COLORS.TEXT_SECONDARY,
+    fontFamily: 'Nunito_600SemiBold',
+    marginRight: 12,
+  },
+  priceValue: {
+    fontSize: 24,
+    color: COLORS.PRIMARY,
+    fontFamily: 'Nunito_700Bold',
+    fontWeight: 'bold',
+  },
+  enrollButton: {
+    ...COMMON_STYLES.buttonStyle,
+    minWidth: 200,
+  },
+  enrollButtonText: {
+    ...COMMON_STYLES.buttonText,
+  },
 });
 
-export default CourseDetails
+export default CourseDetails;

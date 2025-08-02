@@ -5,23 +5,14 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import Checkbox from "expo-checkbox";
-import { useFonts, WorkSans_400Regular } from "@expo-google-fonts/work-sans";
-import { Nunito_700Bold } from "@expo-google-fonts/nunito";
-import AppLoading from "expo-app-loading";
+import { COMMON_STYLES, COLORS } from '../config/styles';
+import { APP_CONFIG } from '../config/constants';
 
 const Contact = ({ navigation }) => {
-  let [fontsLoaded] = useFonts({
-    WorkSans_400Regular,
-    Nunito_700Bold,
-  });
-
-  if (!fontsLoaded) {
-    <AppLoading />;
-  }
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -29,160 +20,215 @@ const Contact = ({ navigation }) => {
   const [agree, setAgree] = useState(false);
 
   const submit = () => {
-    if (!name && !email && !phone && !message) {
-      Alert.alert("Please fill up all the fields");
-    } else {
-      Alert.alert(`Thank You ${name}`);
-      navigation.navigate("Home");
+    if (!name || !email || !phone || !message) {
+      Alert.alert("Error", "Please fill up all the fields");
+      return;
     }
+    
+    if (!agree) {
+      Alert.alert("Error", "Please agree to the terms and conditions");
+      return;
+    }
+    
+    Alert.alert("Success", `Thank you ${name}! We'll get back to you soon.`);
+    navigation.navigate("Home");
   };
 
   return (
-    <View style={styles.mainContainer}>
-      <Text style={styles.mainHeader}>Feel Free to Connect with Us</Text>
+    <ScrollView style={styles.mainContainer} showsVerticalScrollIndicator={false}>
+      <View style={styles.contentContainer}>
+        {/* Header Section */}
+        <View style={styles.headerSection}>
+          <Text style={styles.mainHeader}>Get in Touch</Text>
+          <Text style={styles.description}>
+            Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+          </Text>
+          
+          <View style={styles.contactInfo}>
+            <Text style={styles.contactLabel}>Email us at:</Text>
+            <Text style={styles.contactEmail}>{APP_CONFIG.SUPPORT_EMAIL}</Text>
+          </View>
+        </View>
 
-      <Text style={styles.description}>    
-        Reach us at support@myclasses     
-        </Text>
+        {/* Form Section */}
+        <View style={styles.formContainer}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Full Name</Text>
+            <TextInput
+              style={styles.inputStyle}
+              placeholder="Enter your full name"
+              value={name}
+              onChangeText={setName}
+              placeholderTextColor={COLORS.TEXT_LIGHT}
+            />
+          </View>
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.labels}> Enter your name </Text>
-        <TextInput
-          style={styles.inputStyle}
-          placeholder={"John Doe"}
-          value={name}
-          onChangeText={(userdata) => setName(userdata)}
-        />
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Email Address</Text>
+            <TextInput
+              style={styles.inputStyle}
+              placeholder="Enter your email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              placeholderTextColor={COLORS.TEXT_LIGHT}
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Phone Number</Text>
+            <TextInput
+              style={styles.inputStyle}
+              placeholder="Enter your phone number"
+              value={phone}
+              onChangeText={setPhone}
+              keyboardType="phone-pad"
+              placeholderTextColor={COLORS.TEXT_LIGHT}
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Message</Text>
+            <TextInput
+              style={[styles.inputStyle, styles.multilineStyle]}
+              placeholder="Tell us how we can help you..."
+              value={message}
+              onChangeText={setMessage}
+              numberOfLines={6}
+              multiline={true}
+              textAlignVertical="top"
+              placeholderTextColor={COLORS.TEXT_LIGHT}
+            />
+          </View>
+
+          {/* Terms and Conditions */}
+          <View style={styles.termsContainer}>
+            <Checkbox
+              value={agree}
+              onValueChange={() => setAgree(!agree)}
+              color={agree ? COLORS.PRIMARY : COLORS.BORDER}
+              style={styles.checkbox}
+            />
+            <Text style={styles.termsText}>
+              I have read and agree to the{' '}
+              <Text style={styles.termsLink}>Terms & Conditions</Text>
+            </Text>
+          </View>
+
+          {/* Submit Button */}
+          <TouchableOpacity
+            style={[styles.submitButton, !agree && styles.submitButtonDisabled]}
+            onPress={submit}
+            disabled={!agree}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.submitButtonText}>Send Message</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-
-      <View style={styles.inputContainer}>
-        <Text style={styles.labels}> Enter your Email </Text>
-        <TextInput
-          style={styles.inputStyle}
-          placeholder={"abc@xyz.com"}
-          value={email}
-          onChangeText={(email) => setEmail(email)}
-        />
-      </View>
-
-      <View style={styles.inputContainer}>
-        <Text style={styles.labels}> Enter your mobile </Text>
-        <TextInput
-          style={styles.inputStyle}
-          placeholder={"9876543210"}
-          value={phone}
-          onChangeText={(phone) => setPhone(phone)}
-        />
-      </View>
-
-      <View style={styles.inputContainer}>
-        <Text style={styles.labels}> How can we help you? </Text>
-        <TextInput
-          style={[styles.inputStyle, styles.multilineStyle]}
-          placeholder={"Ask your Query"}
-          value={message}
-          onChangeText={(msg) => setMessage(msg)}
-          numberOfLines={5}
-          multiline={true}
-        />
-      </View>
-
-      {/* checkbox  */}
-
-      <View style={styles.wrapper}>
-        <Checkbox
-          value={agree}
-          onValueChange={() => setAgree(!agree)}
-          color={agree ? "#4630EB" : undefined}
-        />
-        <Text style={styles.wrapperText}>
-          I have read and agreed with the T&C
-        </Text>
-      </View>
-
-      {/* submit button  */}
-
-      <TouchableOpacity
-        style={[
-          styles.buttonStyle,
-          {
-            backgroundColor: agree ? "#4630EB" : "grey",
-          },
-        ]}
-        disabled={!agree}
-        onPress={submit}>
-        <Text style={styles.buttonText}> Contact Us </Text>
-      </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   mainContainer: {
-    height: "100%",
-    paddingHorizontal: 30,
-    backgroundColor: "#fff",
+    ...COMMON_STYLES.mainContainer,
+  },
+  contentContainer: {
+    padding: 20,
+  },
+  headerSection: {
+    alignItems: 'center',
+    marginBottom: 30,
   },
   mainHeader: {
-    fontSize: 24,
-    color: "#344055",
-    fontWeight: "500",
-    paddingTop: 20,
-    paddingBottom: 15,
-    fontFamily: "Nunito_700Bold",
-    textTransform: "capitalize",
+    ...COMMON_STYLES.mainHeader,
+    marginBottom: 16,
   },
   description: {
-    fontSize: 18,
-    color: "#7d7d7d",
-    paddingBottom: 20,
-    fontFamily: "WorkSans_400Regular",
-    lineHeight: 25,
+    ...COMMON_STYLES.paraStyle,
+    textAlign: 'center',
+    marginBottom: 20,
   },
-
+  contactInfo: {
+    backgroundColor: COLORS.WHITE,
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    shadowColor: COLORS.SHADOW,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  contactLabel: {
+    fontSize: 14,
+    color: COLORS.TEXT_SECONDARY,
+    fontFamily: 'JosefinSans_400Regular',
+    marginBottom: 4,
+  },
+  contactEmail: {
+    fontSize: 16,
+    color: COLORS.PRIMARY,
+    fontFamily: 'Nunito_600SemiBold',
+    fontWeight: '600',
+  },
+  formContainer: {
+    backgroundColor: COLORS.WHITE,
+    borderRadius: 16,
+    padding: 24,
+    shadowColor: COLORS.SHADOW,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
+    elevation: 8,
+  },
   inputContainer: {
-    marginTop: 20,
+    ...COMMON_STYLES.inputContainer,
   },
-  labels: {
-    // fontWeight: "bold",
-    fontSize: 15,
-    color: "#7d7d7d",
-    paddingBottom: 5,
-    fontFamily: "WorkSans_400Regular",
-    lineHeight: 25,
+  inputLabel: {
+    ...COMMON_STYLES.inputLabel,
   },
   inputStyle: {
-    borderWidth: 1,
-    borderColor: "rgba(0, 0, 0, 0.3)",
-    paddingHorizontal: 15,
-    paddingVertical: 6,
-    borderRadius: 2,
+    ...COMMON_STYLES.inputStyle,
   },
-  multiineStyle: {
-    paddingVertical: 4,
+  multilineStyle: {
+    height: 120,
+    textAlignVertical: 'top',
   },
-  buttonStyle: {
-    borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 18,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    marginVertical: 30,
+  termsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+    paddingHorizontal: 4,
   },
-  buttonText: {
-    color: "#eee",
+  checkbox: {
+    marginRight: 12,
   },
-  wrapper: {
-    display: "flex",
-    flexDirection: "row",
-    marginTop: 20,
-    fontFamily: "WorkSans_400Regular",
+  termsText: {
+    fontSize: 14,
+    color: COLORS.TEXT_SECONDARY,
+    fontFamily: 'JosefinSans_400Regular',
+    flex: 1,
+    lineHeight: 20,
   },
-  wrapperText: {
-    marginLeft: 10,
-    color: "#7d7d7d",
-    fontFamily: "WorkSans_400Regular",
+  termsLink: {
+    color: COLORS.PRIMARY,
+    fontFamily: 'Nunito_600SemiBold',
+    fontWeight: '600',
+  },
+  submitButton: {
+    ...COMMON_STYLES.buttonStyle,
+    marginTop: 8,
+  },
+  submitButtonDisabled: {
+    backgroundColor: COLORS.GRAY,
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+  submitButtonText: {
+    ...COMMON_STYLES.buttonText,
   },
 });
 
